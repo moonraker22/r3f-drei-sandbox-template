@@ -11,7 +11,12 @@ import {
   Html,
   Text3D,
   useCursor,
+  OrthographicCamera,
   useMatcapTexture,
+  Trail,
+  GradientTexture,
+  MeshReflectorMaterial,
+  MeshWobbleMaterial,
 } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
@@ -35,11 +40,23 @@ const Cube = () => {
         onPointerLeave={() => setHovered(!hovered)}
         scale={hovered ? [1.5, 1.5, 1.5] : [1, 1, 1]}
       >
-        <meshLambertMaterial
-          attach="material"
-          color={hovered ? "green" : "white"}
-        />
+        {/* <MeshReflectorMaterial
+          resolution={512}
+          blur={[1000, 1000]}
+          mixBlur={1}
+          mirror={0.5}
+          // color={hovered ? "green" : "white"}
+        > */}
+        <MeshWobbleMaterial factor={2} speed={5}>
+          <GradientTexture
+            stops={[0, 0.5, 1]} // As many stops as you want
+            colors={["teal", "tomato", "teal"]} // Colors need to match the number of stops
+            size={1024} // Size is optional, default = 1024
+          />
+        </MeshWobbleMaterial>
+        {/* </MeshReflectorMaterial> */}
       </Box>
+
       <directionalLight intensity={hovered ? 0.9 : 0.3} position={[0, 2, 3]} />
     </group>
   );
@@ -100,7 +117,7 @@ const Text = () => {
 function App() {
   const [dpr, setDpr] = useState(2);
   return (
-    <Canvas dpr={dpr}>
+    <Canvas dpr={dpr} gl={{ antialias: false }}>
       <PerformanceMonitor
         onIncline={() => setDpr(2)}
         onDecline={() => setDpr(1.5)}
@@ -129,12 +146,20 @@ function App() {
           <Cube />
           <Html as={"div"}>
             <svg>
-              <circle r="15" fill="green" cx="15" cy="15"></circle>
+              <circle
+                r="15"
+                fill="transparent"
+                cx="15"
+                cy="15"
+                stroke="green"
+                strokeWidth={2}
+              ></circle>
             </svg>
           </Html>
         </Float>
         <Text />
       </PresentationControls>
+      <Environment preset="city" />
     </Canvas>
   );
 }
