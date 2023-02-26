@@ -4,9 +4,13 @@ import {
   Environment,
   Float,
   OrbitControls,
+  PerformanceMonitor,
+  Point,
+  Points,
   PresentationControls,
-  Sparkles,
+  Html,
   Text3D,
+  useCursor,
   useMatcapTexture,
 } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
@@ -24,7 +28,6 @@ const Cube = () => {
     scene.current.rotation.x += 0.04;
     scene.current.rotation.z += 0.04;
   });
-
   return (
     <group ref={scene}>
       <Box
@@ -95,8 +98,13 @@ const Text = () => {
 };
 
 function App() {
+  const [dpr, setDpr] = useState(2);
   return (
-    <Canvas>
+    <Canvas dpr={dpr}>
+      <PerformanceMonitor
+        onIncline={() => setDpr(2)}
+        onDecline={() => setDpr(1.5)}
+      />
       {/* <OrbitControls /> */}
       <PresentationControls
         enabled={true} // the controls can be disabled by setting this to false
@@ -119,6 +127,11 @@ function App() {
           floatingRange={[-1, 1]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
         >
           <Cube />
+          <Html as={"div"}>
+            <svg>
+              <circle r="15" fill="green" cx="15" cy="15"></circle>
+            </svg>
+          </Html>
         </Float>
         <Text />
       </PresentationControls>
