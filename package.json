@@ -13,6 +13,7 @@
     "@react-three/fiber": "^8.11.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "shader-park-core": "^0.1.38",
     "three": "^0.150.0",
     "vite-plugin-glsl": "^1.1.2"
   },
